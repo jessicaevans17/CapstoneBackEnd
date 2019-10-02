@@ -18,5 +18,7 @@ namespace capstonebackend.Models
     public string LocationName { get; set; }
     public string State { get; set; }
 
+    public string Description { get; set; }
+
   }
 }
