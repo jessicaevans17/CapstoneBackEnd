@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using capstonebackend;
@@ -9,37 +10,16 @@ using capstonebackend;
 namespace capstonebackend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20191002144937_AddedDescriptionToGamesTable")]
+    partial class AddedDescriptionToGamesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            modelBuilder.Entity("CapstoneBackEnd.Models.Player", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email");
-
-                    b.Property<int>("GameId");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("ProfileURL");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("Player");
-                });
 
             modelBuilder.Entity("capstonebackend.Models.Game", b =>
                 {
@@ -75,12 +55,28 @@ namespace capstonebackend.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("CapstoneBackEnd.Models.Player", b =>
+            modelBuilder.Entity("capstonebackend.Models.User", b =>
                 {
-                    b.HasOne("capstonebackend.Models.Game", "Game")
-                        .WithMany("Players")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateJoined");
+
+                    b.Property<string>("EmailAddress");
+
+                    b.Property<string>("FavoriteGame");
+
+                    b.Property<int>("GamesAttended");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("ProfilePicUrl");
+
+                    b.Property<int>("ZipCode");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

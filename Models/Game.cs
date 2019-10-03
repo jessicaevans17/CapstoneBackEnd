@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using CapstoneBackEnd.Models;
 
 namespace capstonebackend.Models
 {
@@ -17,8 +19,7 @@ namespace capstonebackend.Models
     public DateTime DateOfPlay { get; set; }
     public string LocationName { get; set; }
     public string State { get; set; }
-
     public string Description { get; set; }
-
+    public List<Player> Players { get; set; } = new List<Player>();
   }
 }

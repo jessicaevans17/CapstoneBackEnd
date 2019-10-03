@@ -45,7 +45,7 @@ namespace capstonebackend
       modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
     }
 
-    public DbSet<User> Users { get; set; }
+
     public DbSet<Game> Games { get; set; }
   }
 }
