@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using capstonebackend.Models;
+using CapstoneBackEnd.Models;
 
 namespace capstonebackend
 {
@@ -47,5 +48,6 @@ namespace capstonebackend
 
 
     public DbSet<Game> Games { get; set; }
+    public DbSet<Player> Players { get; set; }
   }
 }
