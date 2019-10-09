@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using capstonebackend;
@@ -9,9 +10,10 @@ using capstonebackend;
 namespace capstonebackend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20191005134838_AddedPlayerToDb")]
+    partial class AddedPlayerToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,8 +54,6 @@ namespace capstonebackend.Migrations
 
                     b.Property<string>("Creator");
 
-                    b.Property<string>("CreatorProfilePic");
-
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime>("DateOfPlay");
@@ -71,14 +71,6 @@ namespace capstonebackend.Migrations
                     b.Property<string>("State");
 
                     b.Property<int>("ZipCode");
-
-                    b.Property<string>("gameImageUrl");
-
-                    b.Property<int>("maxPlayTime");
-
-                    b.Property<int>("minPlayTime");
-
-                    b.Property<string>("rulesUrl");
 
                     b.HasKey("Id");
 
