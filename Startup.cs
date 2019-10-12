@@ -38,7 +38,7 @@ namespace capstonebackend
      }).AddJwtBearer(options =>
      {
        options.Authority = "https://dev-sd-5mj8q.auth0.com";
-       options.Audience = "OjISDqbVUS0i0VIpOkS9rQ45YPwcvQZJ";
+       options.Audience = "iszPmguOuTFA763KVjj4rxbzNDXyDDTF";
      });
       services.AddCors();
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -68,6 +68,7 @@ namespace capstonebackend
       }
 
       app.UseHttpsRedirection();
+      app.UseAuthentication();
       app.UseCors(builder =>
         builder
             .AllowAnyHeader()

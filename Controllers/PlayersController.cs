@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using capstonebackend;
 using CapstoneBackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CapstoneBackEnd.Controllers
 {
@@ -17,14 +18,19 @@ namespace CapstoneBackEnd.Controllers
     {
       this.context = _context;
     }
-    [HttpPost("{gameId}")]
+    [HttpPost("{gameId}/{userId}")]
 
-    public ActionResult<Player> AddPlayer(int gameId, [FromBody]Player entry)
+    public ActionResult<Player> AddPlayer(int gameId, string userId, [FromBody]Player entry)
     {
       var games = context.Games.FirstOrDefault(g => g.Id == gameId);
+      var player = context.Players.Where(p => p.GameId == gameId).Any(p => p.UserId == userId);
       if (games == null)
       {
         return NotFound();
+      }
+      else if (player)
+      {
+        return BadRequest();
       }
       else
       {
@@ -77,6 +83,22 @@ namespace CapstoneBackEnd.Controllers
     {
       var players = context.Players.OrderByDescending(player => player.Id);
       return players.ToList();
+    }
+
+    [HttpGet("games/{userId}/upcoming")]
+
+    public ActionResult<IEnumerable<Player>> GetAllPlayerGames(string userId)
+    {
+      var player = context.Players.Include(i => i.Game).Where(p => p.UserId == userId).OrderByDescending(p => p.GameId);
+      if (player == null)
+      {
+        return NotFound();
+      }
+      else
+      {
+        return player.ToList();
+      }
+
     }
   }
 }

@@ -25,6 +25,7 @@ namespace capstonebackend.Models
     public string rulesUrl { get; set; }
     public int maxPlayTime { get; set; }
     public int minPlayTime { get; set; }
+    public bool privateResidence { get; set; }
     public List<Player> Players { get; set; } = new List<Player>();
   }
 }
