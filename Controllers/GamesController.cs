@@ -38,10 +38,10 @@ namespace capstonebackend.Controllers
 
         // create the player
         // create a new player
-        var player = new Player { UserId = userId, Name = name, Email = email, ProfileURL = picture, GameId = entry.Id };
+        // var player = new Player { UserId = userId, Name = name, Email = email, ProfileURL = picture, GameId = entry.Id };
 
         // add that player our database
-        context.Players.Add(player);
+        // context.Players.Add(player);
         context.Games.Add(entry);
         context.SaveChanges();
         return Ok(entry);
@@ -54,7 +54,7 @@ namespace capstonebackend.Controllers
     public ActionResult<IEnumerable<Game>> GetAllGames()
     {
 
-      var games = context.Games.OrderByDescending(game => game.DateCreated);
+      var games = context.Games.OrderBy(game => game.DateOfPlay);
       return games.ToList();
     }
 
