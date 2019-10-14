@@ -37,12 +37,12 @@ namespace capstonebackend.Controllers
       {
 
         // create the player
+        context.Games.Add(entry);
         // create a new player
-        // var player = new Player { UserId = userId, Name = name, Email = email, ProfileURL = picture, GameId = entry.Id };
+        var player = new Player { UserId = userId, Name = name, Email = email, ProfileURL = picture, GameId = entry.Id };
 
         // add that player our database
-        // context.Players.Add(player);
-        context.Games.Add(entry);
+        context.Players.Add(player);
         context.SaveChanges();
         return Ok(entry);
       }
@@ -94,5 +94,21 @@ namespace capstonebackend.Controllers
 
     }
 
+    // get games hosted by one player
+    [HttpGet("hosting/{creatorId}")]
+
+    public ActionResult<IEnumerable<Game>> GetHostedGames(string creatorId)
+    {
+      var games = context.Games.Where(g => g.CreatorId == creatorId);
+
+      if (games == null)
+      {
+        return NotFound();
+      }
+      else
+      {
+        return games.ToList();
+      }
+    }
   }
 };

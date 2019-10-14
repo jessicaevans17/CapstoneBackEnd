@@ -16,6 +16,8 @@ namespace capstonebackend.Models
     public int MinPlayers { get; set; }
     public int MaxPlayers { get; set; }
     public string Creator { get; set; }
+
+    public string CreatorId { get; set; }
     public string CreatorProfilePic { get; set; }
     public DateTime DateOfPlay { get; set; }
     public string LocationName { get; set; }
