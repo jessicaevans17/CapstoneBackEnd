@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using capstonebackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using CapstoneBackEnd.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace capstonebackend.Controllers
 {
@@ -23,6 +24,9 @@ namespace capstonebackend.Controllers
     // Creates a new game
     public ActionResult<Game> CreateGame([FromBody]Game entry)
     {
+
+      var firstName = User.Claims.First(f => f.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname").Value;
+      var lastName = User.Claims.First(f => f.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname").Value;
       var userId = User.Claims.First(f => f.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
       var name = User.Claims.First(f => f.Type == "name").Value;
       var picture = User.Claims.First(f => f.Type == "picture").Value;
@@ -39,7 +43,7 @@ namespace capstonebackend.Controllers
         // create the player
         context.Games.Add(entry);
         // create a new player
-        var player = new Player { UserId = userId, Name = name, Email = email, ProfileURL = picture, GameId = entry.Id };
+        var player = new Player { UserId = userId, Name = name, Email = email, ProfileURL = picture, GameId = entry.Id, FirstName = firstName, LastName = lastName };
 
         // add that player our database
         context.Players.Add(player);
@@ -54,7 +58,7 @@ namespace capstonebackend.Controllers
     public ActionResult<IEnumerable<Game>> GetAllGames()
     {
 
-      var games = context.Games.OrderBy(game => game.DateOfPlay);
+      var games = context.Games.Include(g => g.Players).OrderBy(game => game.DateOfPlay);
       return games.ToList();
     }
 
@@ -63,7 +67,7 @@ namespace capstonebackend.Controllers
     public ActionResult<Game> GetOneGame(int id)
     {
 
-      var games = context.Games.FirstOrDefault(g => g.Id == id);
+      var games = context.Games.Include(g => g.Players).FirstOrDefault(g => g.Id == id);
       if (games == null)
       {
         return NotFound();
@@ -74,13 +78,15 @@ namespace capstonebackend.Controllers
       }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{gameId}/{creatorId}")]
     // deletes a game
-    public ActionResult DeleteGame(int id)
+    public ActionResult DeleteGame(int gameId, string creatorId)
     {
 
 
-      var games = context.Games.FirstOrDefault(g => g.Id == id);
+      var games = context.Games.Where(p => p.CreatorId == creatorId).FirstOrDefault(p => p.Id == gameId);
+
+
       if (games == null)
       {
         return NotFound();
@@ -99,7 +105,7 @@ namespace capstonebackend.Controllers
 
     public ActionResult<IEnumerable<Game>> GetHostedGames(string creatorId)
     {
-      var games = context.Games.Where(g => g.CreatorId == creatorId);
+      var games = context.Games.Include(g => g.Players).Where(g => g.CreatorId == creatorId);
 
       if (games == null)
       {
@@ -110,5 +116,7 @@ namespace capstonebackend.Controllers
         return games.ToList();
       }
     }
+
+
   }
 };

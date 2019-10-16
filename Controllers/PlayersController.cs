@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using capstonebackend;
+using capstonebackend.Models;
 using CapstoneBackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,17 +45,17 @@ namespace CapstoneBackEnd.Controllers
 
     [HttpGet("{gameId}")]
 
-    public ActionResult<IEnumerable<Player>> GetPlayersPerGame(int gameId)
+    public ActionResult<Game> GetPlayersPerGame(int gameId)
     {
-      var games = context.Games.FirstOrDefault(g => g.Id == gameId);
-      var players = context.Players.Where(p => p.GameId == gameId);
-      if (games == null)
+      var game = context.Games.Include(g => g.Players).FirstOrDefault(g => g.Id == gameId);
+
+      if (game == null)
       {
         return NotFound();
       }
       else
       {
-        return players.ToList();
+        return game;
 
       }
     }
@@ -87,9 +88,15 @@ namespace CapstoneBackEnd.Controllers
 
     [HttpGet("games/{userId}/upcoming")]
 
-    public ActionResult<IEnumerable<Player>> GetAllPlayerGames(string userId)
+    public ActionResult<IEnumerable<object>> GetAllPlayerGames(string userId)
     {
-      var player = context.Players.Include(i => i.Game).Where(p => p.UserId == userId).OrderByDescending(p => p.GameId);
+
+      var player = from players in context.Players
+                   join games in context.Games.Include(g => g.Players) on players.GameId equals games.Id
+                   select new { players, games };
+
+
+
       if (player == null)
       {
         return NotFound();
